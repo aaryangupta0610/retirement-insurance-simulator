@@ -1,4 +1,8 @@
 import streamlit as st
+from insurance_inputs import InsuranceInputs
+from insurance_gap import calculate_insurance_gap
+from premium_estimator import estimate_life_premium, estimate_health_premium
+
 
 # =============================
 # PAGE CONFIG
@@ -172,4 +176,3 @@ st.markdown(
     "</div>",
     unsafe_allow_html=True
 )
-
