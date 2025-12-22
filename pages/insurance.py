@@ -22,6 +22,15 @@ st.markdown(
     h3 { font-size: 1.5rem; }
     h4 { font-size: 1.2rem; }
 
+    button:focus,
+    button:active,
+    button:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+
     label, .stCaption, .stMarkdown {
         font-size: 1.05rem;
     }
@@ -85,7 +94,7 @@ with col_inputs:
         )
 
         life_cover = st.number_input(
-            "Existing life insurance cover (₹)", 0, value=0, step=100000,
+            "Existing life insurance cover (₹)", 0, value=0, step=1000000,
             help="Total life insurance across all policies"
         )
 
@@ -109,8 +118,7 @@ with col_inputs:
 
         check_clicked = st.button(
             "Check my insurance adequacy",
-            use_container_width=True,
-            type="primary"
+            use_container_width=True
         )
 
 with col_right:
@@ -285,9 +293,12 @@ if check_clicked:
                 <p class="stCaption">
                 Consider increasing your health cover to avoid medical expense shocks.
                 </p>
+
+                <div style="height:180px;"></div>
                 """,
                 unsafe_allow_html=True
             )
+
 
     with col_h_chart:
         df = pd.DataFrame({
@@ -324,6 +335,7 @@ if check_clicked:
                 <p class="stCaption">
                 This gap indicates how much income protection your family may lack.
                 </p>
+                <div style="height:180px;"></div>
                 """,
                 unsafe_allow_html=True
             )
