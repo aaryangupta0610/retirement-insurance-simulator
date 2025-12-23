@@ -65,10 +65,10 @@ This simulator is built to **educate**, not advise or sell.
    git clone https://github.com/<your-username>/retirement-insurance-simulator.git
 
 
-Install dependencies
+Install dependencies : 
 pip install streamlit pandas altair
 
-Run the app
+Run the app : 
 streamlit run app.py
 
  Disclaimer
