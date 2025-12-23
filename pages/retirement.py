@@ -3,23 +3,275 @@ import pandas as pd
 import altair as alt
 
 # ============================================================
-# UI SCALE
+# PAGE CONFIG
+# ============================================================
+st.set_page_config(
+    page_title="Retirement Simulator",
+    layout="wide"
+)
+
+# ============================================================
+# GLOBAL THEME — MATCHES MAIN APP
 # ============================================================
 st.markdown("""
 <style>
-html, body, [class*="css"] { font-size: 17px; }
-h1 { font-size: 2.4rem; }
-h2 { font-size: 1.9rem; }
-h3 { font-size: 1.5rem; }
-.small-note {
-    font-size: 13px;
-    color: #9ca3af;
+/* ===== GLOBAL TEXT SCALE ===== */
+html, body, [class*="css"] {
+    font-size: 17px;   /* default is ~14px */
 }
+
+/* =============================
+   GLOBAL ACCENT COLOR (KEY FIX)
+   ============================= */
+:root {
+    accent-color: #10b981;
+}
+
+/* =============================
+   BASE APP
+   ============================= */
+.stApp {
+    background-color: #0f172a;
+    color: #e5e7eb;
+}
+
+/* =============================
+   HEADINGS
+   ============================= */
+h1, h2, h3 {
+    color: #f8fafc;
+}
+
+/* =============================
+   CONTAINERS (CARDS)
+   ============================= */
+div[data-testid="stContainer"] {
+    background-color: #111827;
+    border-radius: 18px;
+    border: 1px solid #1f2937;
+    padding: 26px;
+}
+div[data-testid="stContainer"]:hover {
+    box-shadow: 0 0 0 1px #10b981;
+}
+
+/* NUMBER INPUT WRAPPER FIX */
+/* NUMBER INPUT WRAPPER FIX */
+div[data-testid="stNumberInput"] {
+    overflow: visible;
+    border-radius: 14px;
+}
+
+div[data-testid="stNumberInput"] > div {
+    border-radius: 14px;
+    overflow: hidden;
+}
+/* NUMBER INPUT WRAPPER FIX */
+div[data-testid="stNumberInput"] {
+    overflow: visible;
+    border-radius: 14px;
+}
+
+div[data-testid="stNumberInput"] > div {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* INPUT FIELD */
+input[type="number"],
+input[type="text"] {
+    background-color: #020617 !important;
+    color: #e5e7eb !important;
+
+    border: 1px solid #1f2937 !important;
+    border-right: none !important;
+
+    border-radius: 14px 0 0 14px !important;
+}
+
+/* FOCUS */
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: #10b981 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+/* INPUT FIELD */
+/* FOCUS */
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: #10b981 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Kill BaseWeb wrapper borders */
+div[data-baseweb="base-input"],
+div[data-baseweb="input"] {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+div[data-baseweb="base-input"]:hover,
+div[data-baseweb="base-input"]:focus,
+div[data-baseweb="base-input"]:focus-within,
+div[data-baseweb="input"]:hover,
+div[data-baseweb="input"]:focus,
+div[data-baseweb="input"]:focus-within {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* MINUS BUTTON */
+button[data-testid="stNumberInputStepDown"] {
+    background-color: #020617 !important;
+    color: #ffffff !important;
+
+    border-top: 1px solid #1f2937 !important;
+    border-bottom: 1px solid #1f2937 !important;
+    border-left: 1px solid #1f2937 !important;
+    border-right: none !important;
+
+    margin-left: -1px !important;   /* 🔥 KEY FIX */
+    border-radius: 0 !important;
+}
+
+/* PLUS BUTTON */
+button[data-testid="stNumberInputStepUp"] {
+    background-color: #020617 !important;
+    color: #ffffff !important;
+
+    border: 1px solid #1f2937 !important;
+    border-left: none !important;
+
+    margin-left: -1px !important;   /* 🔥 KEY FIX */
+    border-radius: 0 14px 14px 0 !important;
+}
+
+/* PLUS BUTTON FOCUS STATE - Match input border color */
+input[type="number"]:focus ~ div button[data-testid="stNumberInputStepUp"],
+input[type="text"]:focus ~ div button[data-testid="stNumberInputStepUp"] {
+    border-color: #10b981 !important;
+}
+
+/* MINUS BUTTON FOCUS STATE - Match input border color */
+input[type="number"]:focus ~ div button[data-testid="stNumberInputStepDown"],
+input[type="text"]:focus ~ div button[data-testid="stNumberInputStepDown"] {
+    border-color: #10b981 !important;
+}
+
+/* HOVER */
+button[data-testid="stNumberInputStepUp"]:hover,
+button[data-testid="stNumberInputStepDown"]:hover {
+    background-color: #10b981 !important;
+    color: #020617 !important;
+}
+
+/* FOCUS */
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: #10b981 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+
+
+/* =============================
+   PRIMARY BUTTON
+   ============================= */
+.stButton > button {
+    background-color: #10b981;
+    color: #022c22;
+    border-radius: 12px;
+    font-weight: 700;
+    border: none;
+    padding: 0.8rem 1.6rem;
+}
+.stButton > button:hover {
+    background-color: #059669;
+}
+
+/* =============================
+   METRICS
+   ============================= */
+[data-testid="stMetricValue"] {
+    color: #5eead4;
+    font-weight: 800;
+}
+
+
+
+/* =============================
+   SCROLLBAR
+   ============================= */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 10px;
+}
+            
+            /* ===== NUMBER INPUT + / − BUTTON BORDER ===== */
+button[data-testid="stNumberInputStepUp"],
+button[data-testid="stNumberInputStepDown"] {
+    background-color: #020617 !important;    /* dark background */
+    color: #ffffff !important;
+    padding: 0.25rem 0.25rem !important;
+}
+
+
+
+/* =============================
+   PROGRESS BAR — HARD RESET
+   ============================= */
+
+/* Kill Streamlit default wrapper */
+div[data-testid="stProgress"] {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* Kill BaseWeb progress visuals */
+div[data-testid="stProgress"] div[role="progressbar"] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Track */
+div[data-testid="stProgress"] > div {
+    background-color: #020617 !important;
+    height: 12px !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
+}
+
+/* Fill */
+div[data-testid="stProgress"] > div > div {
+    background-color: #10b981 !important;
+    height: 100% !important;
+    border-radius: 999px !important;
+}
+
+/* Nuclear option — remove ALL outlines */
+div[data-testid="stProgress"],
+div[data-testid="stProgress"] *,
+div[data-testid="stProgress"] *::before,
+div[data-testid="stProgress"] *::after {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
+
+
 # ============================================================
-# CONSTANTS
+# CONSTANTS (UNCHANGED)
 # ============================================================
 INFLATION = 0.06
 POST_RET_RETURN = 0.05
@@ -39,6 +291,39 @@ RISK_ALLOC = {
     4: {"Equity": 0.65, "Debt": 0.20, "Gold": 0.10, "Savings": 0.05},
     5: {"Equity": 0.75, "Debt": 0.10, "Gold": 0.10, "Savings": 0.05},
 }
+
+# ============================================================
+# ALTAR DARK THEME (GLOBAL)
+# ============================================================
+alt.themes.register(
+    "dark_emerald",
+    lambda: {
+        "config": {
+            "background": "transparent",
+            "axis": {
+                "labelColor": "#9ca3af",
+                "titleColor": "#e5e7eb",
+                "gridColor": "#1f2937",
+                "tickColor": "#374151",
+            },
+            "legend": {
+                "labelColor": "#e5e7eb",
+                "titleColor": "#e5e7eb"
+            },
+            "range": {
+                "category": ["#10b981", "#5eead4", "#34d399", "#059669"]
+            }
+        }
+    }
+)
+alt.themes.enable("dark_emerald")
+
+# ============================================================
+# HEADER
+# ============================================================
+st.markdown("## Retirement Simulator")
+st.markdown("Understand how much money you’ll need for retirement — and how to realistically get there.")
+st.divider()
 
 # ============================================================
 # RETIREMENT CORPUS ENGINES (ONLY THIS LOGIC CHANGED)
@@ -126,12 +411,6 @@ def system_risk_level(current_age, retirement_age, is_behind):
 def blended_risk(user_risk, system_risk):
     return max(1, min(5, round(0.6 * user_risk + 0.4 * system_risk)))
 
-# ============================================================
-# HEADER
-# ============================================================
-st.markdown("## Retirement Simulator")
-st.markdown("Understand how much money you’ll need for retirement — and how to realistically get there.")
-st.divider()
 
 # ============================================================
 # INPUTS
@@ -183,6 +462,7 @@ with col_inputs:
         current_savings = st.number_input("Retirement savings accumulated so far", step=50000, value=0)
         st.markdown("---")
 
+
         user_risk = st.slider(
             "Risk tolerance",
             min_value=1,
@@ -218,7 +498,7 @@ if calculate:
         else required_corpus_fd_lockin(monthly_expense, years_to_ret, retirement_years)
     )
 
-    progress = min(current_savings / required, 1.0)
+    progress = max(0.0, min(current_savings / required, 1.0)) if required > 0 else 0.0
 
     r_user = portfolio_return(user_risk)
     required_sip = required_monthly_sip(required, current_savings, years_to_ret, r_user)
@@ -253,8 +533,30 @@ if calculate:
 
         with st.container(border=True):
             st.markdown("### Your retirement journey so far")
-            st.progress(progress)
-            st.caption(f"You’ve saved ₹{current_savings:,} out of ₹{required/1e7:.2f} Cr")
+            st.markdown(
+    f"""
+    <div style="
+        width: 100%;
+        background: #020617;
+        border-radius: 999px;
+        height: 12px;
+        overflow: hidden;
+        margin-top: 8px;
+    ">
+        <div style="
+            width: {progress*100:.2f}%;
+            background: #10b981;
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        "></div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+            st.caption(f"{progress*100:.1f}% complete")
+            st.caption(f"You've saved ₹{current_savings:,} out of ₹{required/1e7:.2f} Cr")
 
         with st.container(border=True):
             st.markdown("### Your Retirement Requirement")
@@ -269,8 +571,11 @@ if calculate:
             else:
                 st.success("At your current investment rate, you are on track.")
 
+        # ============================================================
+    # SIP PATH (WITH VISIBLE POINTS)
     # ============================================================
-    # SIP PATH (UNCHANGED)
+        # ============================================================
+    # SIP PATH (FIXED: INSIDE EXPANDER + SMALLER POINTS)
     # ============================================================
     years = list(range(1, years_to_ret + 1))
     sip = current_monthly_investment
@@ -290,14 +595,56 @@ if calculate:
 
     if is_behind and can_recover:
         with st.expander(" How to close the gap (overshoot path)"):
-            st.line_chart(df.set_index("Years till retirement"))
+
+            line_df = df.melt(
+                "Years till retirement",
+                var_name="Type",
+                value_name="Monthly SIP"
+            )
+
+            # ---- Lines for ALL paths ----
+            lines = alt.Chart(line_df).mark_line(
+                strokeWidth=3
+            ).encode(
+                x="Years till retirement:Q",
+                y="Monthly SIP:Q",
+                color=alt.Color(
+                    "Type:N",
+                    scale=alt.Scale(
+                        domain=["Catch-up Path", "Current SIP", "Required SIP"],
+                        range=["#22c55e", "#38bdf8", "#facc15"]
+                    )
+                )
+            )
+
+            # ---- Points ONLY for Catch-up Path (smaller & clean) ----
+            points = alt.Chart(
+                line_df[line_df["Type"] == "Catch-up Path"]
+            ).mark_circle(
+                size=42,                 # ✅ FIXED (was too big)
+                filled=True,
+                stroke="#020617",
+                strokeWidth=1.5
+            ).encode(
+                x="Years till retirement:Q",
+                y="Monthly SIP:Q",
+                color=alt.value("#22c55e")
+            )
+
+            st.altair_chart(
+                (lines + points).properties(height=320),
+                use_container_width=True
+            )
+
+
+
 
     # ============================================================
     # INVESTMENT ALLOCATION (UNCHANGED)
-    # ============================================================
-    with st.container(border=True):
-        st.markdown("### Where your monthly investment goes")
-        st.markdown(
+    # ==    ==========================================================
+        with st.container(border=True):
+            st.markdown("### Where your monthly investment goes")
+            st.markdown(
             f"""
             **Your risk choice:** {user_risk}  
             **System suggested risk:** {system_risk}  
@@ -313,10 +660,23 @@ if calculate:
 
         c1, c2 = st.columns(2)
         with c1:
-            pie = alt.Chart(alloc_df).mark_arc(innerRadius=50).encode(
-                theta="Monthly Amount (₹):Q",
-                color="Asset Class:N"
-            )
+            pie = alt.Chart(alloc_df).mark_arc(innerRadius=55).encode(
+    theta=alt.Theta("Monthly Amount (₹):Q", stack=True),
+    color=alt.Color(
+        "Asset Class:N",
+        scale=alt.Scale(
+            range=[
+    "#22c55e",  # soft green
+    "#3b82f6",  # soft blue
+    "#eab308",  # soft amber
+    "#94a3b8"   # muted gray
+]
+
+        ),
+        legend=alt.Legend(title="Asset Class")
+    )
+)
+
             st.altair_chart(pie, use_container_width=True)
 
         with c2:
