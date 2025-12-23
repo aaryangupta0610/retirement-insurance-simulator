@@ -534,34 +534,73 @@ if calculate:
         with st.container(border=True):
             st.markdown("### Your retirement journey so far")
             st.markdown(
-    f"""
-    <div style="
-        width: 100%;
-        background: #020617;
-        border-radius: 999px;
-        height: 12px;
-        overflow: hidden;
-        margin-top: 8px;
-    ">
-        <div style="
-            width: {progress*100:.2f}%;
-            background: #10b981;
-            height: 100%;
-            border-radius: 999px;
-            transition: width 0.6s ease;
-        "></div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+        f"""
+            <div style="
+                width: 100%;
+                background: #020617;
+                border-radius: 999px;
+                height: 12px;
+                overflow: hidden;
+                margin-top: 8px;
+            ">
+            <div style="
+                width: {progress*100:.2f}%;
+                background: #10b981;
+                height: 100%;
+                border-radius: 999px;
+                transition: width 0.6s ease;
+            "></div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
             st.caption(f"{progress*100:.1f}% complete")
             st.caption(f"You've saved ₹{current_savings:,} out of ₹{required/1e7:.2f} Cr")
 
         with st.container(border=True):
             st.markdown("### Your Retirement Requirement")
-            st.markdown(f"**Required Corpus:** ₹{required/1e7:.2f} Cr")
-            st.markdown(f"**Required Monthly Investment:** ₹{required_sip:,} / month")
+
+            st.markdown(
+        f"""
+        <div style="margin-top: px;">
+            <p style="
+                margin-bottom: 0px;
+                font-size: 0.95rem;
+                color: #cbd5e1;
+            ">
+                Required retirement corpus (Adjusted to inflation)
+            </p>
+            <h1 style="
+                margin: 0;
+                font-weight: 800;
+                color: #f8fafc;
+            ">
+                ₹{required/1e7:.2f} Cr
+            </h1>
+        </div>
+
+        <div style="margin-top: 6px;">
+            <p style="
+                margin-bottom: 0px;
+                font-size: 0.95rem;
+                color: #cbd5e1;
+            ">
+                Required monthly investment
+            </p>
+            <h2 style="
+                margin: 0;
+                font-weight: 700;
+                color: #f8fafc;
+            ">
+                ₹{required_sip:,} / month
+            </h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
 
             if is_behind:
                 if not can_recover:
@@ -682,22 +721,16 @@ if calculate:
         with c2:
             st.dataframe(alloc_df, hide_index=True, use_container_width=True)
 
-    # ============================================================
-    # POST-RETIREMENT EXPLANATION (UNCHANGED)
-    # ============================================================
-    with st.container(border=True):
-        st.markdown("### How your retirement money is used")
-        st.markdown("""
-        • Short-term: Fixed deposits / liquid funds  
-        • Medium-term: Debt instruments  
-        • Long-term: Growth assets  
+    with st.container(border=False):
+        with st.expander("How your retirement money is used"):
+            st.markdown("""
+        • **Short-term:** Fixed deposits / liquid funds  
+        • **Medium-term:** Debt instruments  
+        • **Long-term:** Growth assets  
         """)
 
-    # ============================================================
-    # FINAL EXPLANATION (UPDATED TEXT ONLY)
-    # ============================================================
-    with st.container(border=True):
-        st.markdown("### How to interpret the two retirement models")
+with st.container(border=False):
+    with st.expander("How to interpret the two retirement models"):
         st.markdown("""
         **Portfolio Withdrawal (Systematic)**  
         • Corpus stays invested across assets  
@@ -713,3 +746,4 @@ if calculate:
 
         Both models ensure the corpus lasts till age 90.
         """)
+

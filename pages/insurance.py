@@ -10,53 +10,155 @@ from premium_estimator import estimate_life_premium, estimate_health_premium
 # ============================================================
 # GLOBAL UI: FONT SCALE + BLUE ACCENTS
 # ============================================================
-st.markdown(
-    """
-    <style>
-    html, body, [class*="css"] {
-        font-size: 17px;
-    }
+st.markdown("""
+<style>
+/* ===== GLOBAL TEXT SCALE ===== */
+html, body, [class*="css"] {
+    font-size: 17px;
+}
 
-    h1 { font-size: 2.4rem; }
-    h2 { font-size: 1.9rem; }
-    h3 { font-size: 1.5rem; }
-    h4 { font-size: 1.2rem; }
+/* =============================
+   GLOBAL ACCENT COLOR (KEY FIX)
+   ============================= */
+:root {
+    accent-color: #10b981;
+}
 
-    button:focus,
-    button:active,
-    button:focus-visible {
-        outline: none !important;
-        box-shadow: none !important;
-        border: none !important;
-    }
+/* =============================
+   BASE APP
+   ============================= */
+.stApp {
+    background-color: #0f172a;
+    color: #e5e7eb;
+}
 
+/* =============================
+   HEADINGS
+   ============================= */
+h1, h2, h3 {
+    color: #f8fafc;
+}
 
-    label, .stCaption, .stMarkdown {
-        font-size: 1.05rem;
-    }
+/* =============================
+   CONTAINERS (CARDS)
+   ============================= */
+div[data-testid="stContainer"] {
+    background-color: #111827;
+    border-radius: 18px;
+    border: 1px solid #1f2937;
+    padding: 26px;
+}
+div[data-testid="stContainer"]:hover {
+    box-shadow: 0 0 0 1px #10b981;
+}
 
-    input, textarea {
-        font-size: 1.05rem !important;
-    }
+/* NUMBER INPUT WRAPPER FIX */
+div[data-testid="stNumberInput"] {
+    overflow: visible;
+    border-radius: 14px;
+}
+div[data-testid="stNumberInput"] > div {
+    border-radius: 14px;
+    overflow: hidden;
+}
 
-    /* BLUE PRIMARY BUTTON */
-    div.stButton > button {
-        background-color: #3b82f6;
-        color: white;
-        border-radius: 8px;
-        height: 3rem;
-        font-size: 1.05rem;
-    }
+/* INPUT FIELD */
+input[type="number"],
+input[type="text"] {
+    background-color: #020617 !important;
+    color: #e5e7eb !important;
+    border: 1px solid #1f2937 !important;
+    border-right: none !important;
+    border-radius: 14px 0 0 14px !important;
+}
 
-    /* BLUE MULTISELECT TAGS */
-    span[data-baseweb="tag"] {
-        background-color: #3b82f6 !important;
-        color: white !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+/* FOCUS */
+input[type="number"]:focus,
+input[type="text"]:focus {
+    border-color: #10b981 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Kill BaseWeb wrapper borders */
+div[data-baseweb="base-input"],
+div[data-baseweb="input"] {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* MINUS BUTTON */
+button[data-testid="stNumberInputStepDown"] {
+    background-color: #020617 !important;
+    color: #ffffff !important;
+    border-top: 1px solid #1f2937 !important;
+    border-bottom: 1px solid #1f2937 !important;
+    border-left: 1px solid #1f2937 !important;
+    border-right: none !important;
+    margin-left: -1px !important;
+    border-radius: 0 !important;
+}
+
+/* PLUS BUTTON */
+button[data-testid="stNumberInputStepUp"] {
+    background-color: #020617 !important;
+    color: #ffffff !important;
+    border: 1px solid #1f2937 !important;
+    border-left: none !important;
+    margin-left: -1px !important;
+    border-radius: 0 14px 14px 0 !important;
+}
+
+/* HOVER */
+button[data-testid="stNumberInputStepUp"]:hover,
+button[data-testid="stNumberInputStepDown"]:hover {
+    background-color: #10b981 !important;
+    color: #020617 !important;
+}
+
+/* =============================
+   PRIMARY BUTTON
+   ============================= */
+.stButton > button {
+    background-color: #10b981;
+    color: #022c22;
+    border-radius: 12px;
+    font-weight: 700;
+    border: none;
+    padding: 0.8rem 1.6rem;
+}
+.stButton > button:hover {
+    background-color: #059669;
+}
+
+/* =============================
+   METRICS
+   ============================= */
+[data-testid="stMetricValue"] {
+    color: #5eead4;
+    font-weight: 800;
+}
+
+/* =============================
+   SCROLLBAR
+   ============================= */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 10px;
+}
+
+/* =============================
+   PROGRESS BAR
+   ============================= */
+div[data-testid="stProgress"] > div > div {
+    background-color: #10b981 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 # ============================================================
 # PAGE HEADER
@@ -123,7 +225,7 @@ with col_inputs:
 
 with col_right:
     with st.container(border=True):
-        st.markdown("### Assumptions Used")
+        st.markdown("### Our Assumptions")
 
         # Layer 1: Short, user-friendly summary
         st.caption(
@@ -395,7 +497,7 @@ if check_clicked:
                 )
 
         else:
-            st.success("✅ Your life insurance coverage appears adequate.")
+            st.success("Your life insurance coverage appears adequate.")
 
         st.markdown("<br>", unsafe_allow_html=True)
 
